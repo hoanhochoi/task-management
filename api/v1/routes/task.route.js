@@ -10,6 +10,8 @@ Route.patch("/change-status/:id",controller.changeStatus)
 
 Route.patch("/change-multi",controller.changeMulti);
 
+Route.post("/create",controller.create)
+
 
 
 module.exports = Route;
