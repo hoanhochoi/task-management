@@ -10,7 +10,16 @@ Route.get("/",async (req,res)=>{
     if(req.query.status){
         find.status = req.query.status
     }
-    const tasks = await Task.find(find)
+    console.log(req.query);
+    // sort
+     const sort = {}
+     if(req.query.sortKey && req.query.sortValue){
+        const sortKey = req.query.sortKey
+        const sortValue = req.query.sortValue
+        sort[sortKey] = sortValue
+     }
+    // end sort
+    const tasks = await Task.find(find).sort(sort)
     console.log(tasks);
     res.json(tasks)
 });
