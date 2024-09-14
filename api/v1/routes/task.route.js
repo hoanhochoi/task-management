@@ -4,9 +4,13 @@ const express = require("express")
 const Route = express.Router();
 
 Route.get("/",async (req,res)=>{
-    const tasks = await Task.find({
+    const find = {
         deleted: false
-    })
+    }
+    if(req.query.status){
+        find.status = req.query.status
+    }
+    const tasks = await Task.find(find)
     console.log(tasks);
     res.json(tasks)
 });
@@ -23,5 +27,7 @@ Route.get("/detail/:id",async (req,res)=>{
     res.json("không tìm thấy")
    }
 })
+
+
 
 module.exports = Route;
