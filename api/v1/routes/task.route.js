@@ -8,6 +8,8 @@ Route.get("/detail/:id",controller.detail);
 
 Route.patch("/change-status/:id",controller.changeStatus)
 
+Route.patch("/change-multi",controller.changeMulti);
+
 
 
 module.exports = Route;

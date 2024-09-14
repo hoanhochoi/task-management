@@ -42,7 +42,6 @@ module.exports.tasks = async (req,res)=>{
     .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
-    console.log(tasks);
     res.json(tasks)
 }
 
@@ -81,4 +80,42 @@ module.exports.changeStatus = async (req,res)=>{
         message: "không tồn tại"
     })
   }
+}
+
+// [PATCH] api/v1/tasks/change-multi
+module.exports.changeMulti = async (req,res)=>{
+   try {
+    const { id,key,value} = req.body;
+    console.log("oke in ra")
+    console.log(id)
+    console.log(key)
+    console.log(value)
+    switch (key) {
+        case "status":
+            await Task.updateMany({
+                _id: {$in : id}
+            },{
+                status : value
+            })
+            res.json({
+                code: 200,
+                message: "cập nhật thành công!"
+            })
+            break;
+    
+        default:
+            res.json({
+                code: 400,
+                message: "cập nhật thất bại!"
+            })
+            break;
+    }
+    
+   
+   } catch (error) {
+    res.json({
+        code: 400,
+        message: "cập nhật thất bại!"
+    })
+   }
 }
