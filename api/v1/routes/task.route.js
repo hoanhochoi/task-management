@@ -10,7 +10,12 @@ Route.patch("/change-status/:id",controller.changeStatus)
 
 Route.patch("/change-multi",controller.changeMulti);
 
-Route.post("/create",controller.create)
+Route.post("/create",controller.create);
+
+Route.patch("/edit/:id",controller.edit);
+
+Route.delete("/delete/:id",controller.delete);
+
 
 
 
