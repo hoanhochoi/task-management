@@ -31,3 +31,42 @@ module.exports.register = async (req,res)=>{
     }
     
 }
+
+// [POST] api/v1/user/login
+module.exports.login = async (req,res)=>{
+ try {
+    req.body.password = md5(req.body.password);
+    const {email,password} = req.body;
+    console.log(email)
+    console.log(password);
+    const user = await User.findOne({
+        email: email,
+        deleted: false,
+    })
+    if(!user){
+        res.json({
+            code: 400,
+            message: "email không tồn tại!"
+        })
+    }
+    console.log(user)
+    const token = user.token
+    res.cookie("token",token)
+    if(user.password !== password){
+        res.json({
+            code: 400,
+            message: "mật khẩu không đúng!"
+        })
+    }
+    res.json({
+        code: 200,
+        message: "đăng nhập thành công!"
+    })
+ } catch (error) {
+    res.clearCookie("token")
+    res.json({
+        code: 400,
+        message: "đăng nhập thất bại"
+    })
+ }
+}
