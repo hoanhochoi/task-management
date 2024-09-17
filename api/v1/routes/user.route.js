@@ -12,4 +12,6 @@ Route.post("/password/forgot",controller.forgotPassword)
 Route.post("/password/otp",controller.otpPassword)
 
 Route.post("/password/reset",controller.resetPassword)
+
+Route.get("/detail",controller.detail);
 module.exports = Route;
