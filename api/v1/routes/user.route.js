@@ -7,4 +7,6 @@ Route.post("/register",controller.register);
 
 Route.post("/login",CheckLoginValidate.loginPost,controller.login)
 
+Route.post("/password/forgot",controller.forgotPassword)
+
 module.exports = Route;
