@@ -60,6 +60,7 @@ module.exports.login = async (req,res)=>{
             code: 400,
             message: "mật khẩu không đúng!"
         })
+        return;
     }
     res.json({
         code: 200,
@@ -136,5 +137,40 @@ module.exports.otpPassword = async (req,res)=>{
     res.json({
         code: 200,
         message: "xác thực thành công!"
+    })
+}
+
+// [POST] api/v1/users/password/reset
+module.exports.resetPassword = async (req,res)=>{
+    // nếu không muốn lấy token ở body thì lấy ở cookie = req.cookies
+    const users = await User.find({
+        deleted: false
+    })
+    console.log(users);
+    const {token,password} = req.body;
+    console.log("token:"+token)
+    console.log("password:"+password)
+    const user = await User.findOne({
+        token: token
+    })
+    console.log(user);
+    console.log("mk md5:"+user.password)
+    console.log("mk gui md5:"+md5(password))
+    if(md5(password) === user.password){
+        res.json({
+            code: 400,
+            message:"vui lòng nhập mật khẩu mới khác mật khẩu cũ!"
+        })
+        return;
+    }
+    await User.updateOne({
+        token: token,
+    },{
+        password: md5(password)
+
+    })
+    res.json({
+        code: 200,
+        mesage: "đặt lại mật khẩu thành công"
     })
 }
