@@ -112,3 +112,29 @@ module.exports.forgotPassword = async (req,res)=>{
         message:"Đã gửi mã OTP qua email"
     })
 }
+
+// [POST] api/v1/users/password/otp
+module.exports.otpPassword = async (req,res)=>{
+    const {email,otp} = req.body;
+    const result = await forgotPassword.findOne({
+        email: email,
+        otp: otp
+    })
+    if(!result){
+        res.json({
+            code: 400,
+            message: "mã otp không đúng!"
+        })
+        return ;
+    }
+    const user = await User.findOne({
+        email: email,
+        deleted: false
+    })
+    const token = user.token;
+    res.cookie("token",token)
+    res.json({
+        code: 200,
+        message: "xác thực thành công!"
+    })
+}

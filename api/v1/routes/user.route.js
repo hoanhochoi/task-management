@@ -9,4 +9,6 @@ Route.post("/login",CheckLoginValidate.loginPost,controller.login)
 
 Route.post("/password/forgot",controller.forgotPassword)
 
+Route.post("/password/otp",controller.otpPassword)
+
 module.exports = Route;
