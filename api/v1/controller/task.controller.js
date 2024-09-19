@@ -1,6 +1,7 @@
 const Task = require("../models/task.model")
 const paginationHelper = require("../../../helper/pagination");
 const searchHelper = require("../../../helper/searchHelper");
+const User = require("../models/user.model");
 // [GET] api/v1/tasks/
 module.exports.tasks = async (req, res) => {
     const find = {
@@ -139,6 +140,18 @@ module.exports.changeMulti = async (req, res) => {
 // [POST] api/v1/tasks/create
 module.exports.create = async (req, res) => {
     try {
+        const taskParentId = req.body.taskParentId
+        const userParent = await User.findOne({
+            _id: taskParentId,
+            deleted: false
+        })
+        if(!userParent){
+            res.json({
+                code: 400,
+                message: "id cha không tồn tại!"
+            })
+            return;
+        }
         req.body.createdBy = req.user.id
         const task = new Task(req.body);
         console.log(task)
