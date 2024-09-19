@@ -41,8 +41,6 @@ module.exports.login = async (req, res) => {
     try {
         req.body.password = md5(req.body.password);
         const { email, password } = req.body;
-        console.log(email)
-        console.log(password);
         const user = await User.findOne({
             email: email,
             deleted: false,
@@ -53,7 +51,7 @@ module.exports.login = async (req, res) => {
                 message: "email không tồn tại!"
             })
         }
-        console.log(user)
+        // console.log(user)
         const token = user.token
         res.cookie("token", token)
         if (user.password !== password) {
@@ -65,7 +63,8 @@ module.exports.login = async (req, res) => {
         }
         res.json({
             code: 200,
-            message: "đăng nhập thành công!"
+            message: "đăng nhập thành công!",
+            token: token,
         })
     } catch (error) {
         res.clearCookie("token")
@@ -78,7 +77,6 @@ module.exports.login = async (req, res) => {
 
 // [POST] api/v1/user/password/forgot 
 module.exports.forgotPassword = async (req, res) => {
-    console.log(req.body)
     const email = req.body.email
     const user = await User.findOne({
         email: email,
@@ -147,16 +145,10 @@ module.exports.resetPassword = async (req, res) => {
     const users = await User.find({
         deleted: false
     })
-    console.log(users);
     const { token, password } = req.body;
-    console.log("token:" + token)
-    console.log("password:" + password)
     const user = await User.findOne({
         token: token
     })
-    console.log(user);
-    console.log("mk md5:" + user.password)
-    console.log("mk gui md5:" + md5(password))
     if (md5(password) === user.password) {
         res.json({
             code: 400,
@@ -179,22 +171,12 @@ module.exports.resetPassword = async (req, res) => {
 
 // [GET] api/v1/users/detail
 module.exports.detail = async (req,res)=>{
-    try {
-        const token = req.cookies.token;
-    const user = await User.findOne({
-        token: token,
-        deleted: false
-    }).select("-password -deleted")
 
-    console.log(user)
     res.json({
         code: 200,
         message: "lấy thông tin thành công",
-        user: user
+        // user: 
+        user : req.user
     })
-    } catch (error) {
-        res.json({
-            code: 400
-        })
-    }
+    
 }
