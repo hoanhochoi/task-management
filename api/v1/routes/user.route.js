@@ -15,4 +15,6 @@ Route.post("/password/otp",controller.otpPassword)
 Route.post("/password/reset",controller.resetPassword)
 
 Route.get("/detail",authMiddleware.requireAuth,controller.detail);
+
+Route.get("/list",authMiddleware.requireAuth,controller.listUser);
 module.exports = Route;
